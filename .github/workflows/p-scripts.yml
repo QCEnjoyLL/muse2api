@@ -1,0 +1,24 @@
+name: p-scripts
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: info
+        id: info
+        run: |
+          # GHCR image name must be lowercase
+          echo "image=${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+          echo "version=$(jq -r '.version // "0.0.0"' version.json 2>/dev/null || echo 0.0.0)" >> "$GITHUB_OUTPUT"
+          echo "short=$(git rev-parse --short=7 HEAD)" >> "$GITHUB_OUTPUT"
+          echo "upsha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - name: summary
+        run: |
+          {
+            echo "### done"
+            echo ""
+            echo "| a | b |"
+            echo "|---|---|"
+            echo "| v | \`${{ steps.info.outputs.version }}\` |"
+          } >> "$GITHUB_STEP_SUMMARY"

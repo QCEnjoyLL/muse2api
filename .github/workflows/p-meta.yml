@@ -1,0 +1,17 @@
+name: p-meta
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  packages: write
+env:
+  REGISTRY: ghcr.io
+concurrency:
+  group: build-image
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - run: echo ok
