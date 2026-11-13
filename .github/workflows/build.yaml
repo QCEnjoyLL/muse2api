@@ -4,8 +4,6 @@ name: build-image
 # 触发方式：每周一北京时间 09:00 自动构建；或到 Actions 页面手动 Run workflow。
 
 on:
-  push:
-    branches: [main]
   schedule:
     - cron: '0 1 * * 1'      # UTC 周一 01:00 = 北京时间周一 09:00
   workflow_dispatch:

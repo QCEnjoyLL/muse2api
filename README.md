@@ -16,21 +16,23 @@
 
 ---
 
-## 一、先手动跑一次
+## 一、镜像已经构建好了
 
-仓库刚建好时还没有镜像，建议先手动出一次：
+首次构建在仓库建立时就跑通了（上游 `v1.6.10`），可以直接拉到服务器上用，不用再等周一。
+
+需要立刻重新出镜像时：
 
 1. 打开 **Actions** → 左侧 `build-image` → **Run workflow** → 分支选 `main` → 绿色按钮。
-2. 约 5~10 分钟跑完（第一次没缓存，之后有缓存会快很多）。
-3. 成功后到 **个人头像 → Your profile → Packages** 能看到 `muse2api`。
+2. 约 5~10 分钟跑完（有层缓存会快很多）。
+3. 跑完到 **个人头像 → Your profile → Packages** 能看到 `muse2api`。
 
-### 把包设为 public（推荐）
+### 包的可见性
 
-包默认可能是 private，那样服务器拉取要登录。改成公开后就可以匿名 `docker pull`：
+当前 `muse2api` 包是公开的，服务器不需要登录就能 `docker pull`。如果哪天拉取报 `denied` / `unauthorized`，来这儿检查：
 
 **Packages → muse2api → Package settings → Danger Zone → Change visibility → Public**
 
-如果不想公开，就在服务器上登录一次（PAT 需要勾 `read:packages`）：
+不想公开的话，就在服务器上登录一次（PAT 需要勾 `read:packages`）：
 
 ```bash
 echo "<你的PAT>" | docker login ghcr.io -u QCEnjoyLL --password-stdin
@@ -234,7 +236,7 @@ client_max_body_size 200M;
 
 想立刻出镜像：Actions → `build-image` → **Run workflow**。
 
-想改频率：编辑 `.github/workflows/build-image.yml` 里的 `cron`，格式是 `分 时 日 月 周`，注意**用的是 UTC 时间**（北京时间减 8 小时）：
+想改频率：编辑 `.github/workflows/build.yaml` 里的 `cron`，格式是 `分 时 日 月 周`，注意**用的是 UTC 时间**（北京时间减 8 小时）：
 
 | 想要的效果 | cron |
 |---|---|
