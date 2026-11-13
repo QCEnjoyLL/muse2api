@@ -4,9 +4,9 @@
 
 - 自动构建：**每周一 09:00（北京时间）**
 - 手动构建：Actions → `build-image` → **Run workflow**
-- 镜像地址：`ghcr.io/qcjoyll/muse2api`
+- 镜像地址：`ghcr.io/qcenjoyll/muse2api`
 
-> 注意镜像名全小写。GitHub 用户名是 `QCEnjoyLL`，但 GHCR 不接受大写，请用 `qcjoyll`。
+> 注意镜像名全小写。GitHub 用户名是 `QCEnjoyLL`，但 GHCR 不接受大写，请用 `qcenjoyll`。
 
 | Tag | 含义 |
 |---|---|
@@ -45,7 +45,7 @@ echo "<你的PAT>" | docker login ghcr.io -u QCEnjoyLL --password-stdin
 全程只用 `docker` 命令，不需要装 git、不需要 clone 源码。
 
 ```bash
-docker pull ghcr.io/qcjoyll/muse2api:latest
+docker pull ghcr.io/qcenjoyll/muse2api:latest
 ```
 
 ```bash
@@ -65,7 +65,7 @@ docker run -d \
   -e MUSE2API_VIDEO_TIMEOUT=600 \
   -e MUSE2API_CHAT_TIMEOUT=300 \
   -v /opt/muse2api/data:/app/data \
-  ghcr.io/qcjoyll/muse2api:latest
+  ghcr.io/qcenjoyll/muse2api:latest
 ```
 
 参数说明：
@@ -104,7 +104,7 @@ API 入口就是 `http://<服务器IP>:18610/v1`，请求头带 `Authorization: 
 上游更新后，镜像会在下一个周一自动构建。服务器的更新就是 pull + 重建容器（`data/` 不动，账号不丢）：
 
 ```bash
-docker pull ghcr.io/qcjoyll/muse2api:latest
+docker pull ghcr.io/qcenjoyll/muse2api:latest
 docker rm -f muse2api
 docker run -d \
   --name muse2api \
@@ -116,7 +116,7 @@ docker run -d \
   -e MUSE2API_KEY=m2a_your_admin_key \
   -e MUSE2API_CONCURRENCY=2 \
   -v /opt/muse2api/data:/app/data \
-  ghcr.io/qcjoyll/muse2api:latest
+  ghcr.io/qcenjoyll/muse2api:latest
 ```
 
 > 重建会打断正在跑的生成任务，升级后未完成的任务会被标记为失败，别挑高峰期。
@@ -126,7 +126,7 @@ docker run -d \
 ```bash
 #!/usr/bin/env bash
 set -euo pipefail
-IMG=ghcr.io/qcjoyll/muse2api:latest
+IMG=ghcr.io/qcenjoyll/muse2api:latest
 docker pull "$IMG"
 docker rm -f muse2api 2>/dev/null || true
 docker run -d --name muse2api --restart unless-stopped \
@@ -152,7 +152,7 @@ export MUSE2API_KEY=m2a_your_admin_key
 ```yaml
 services:
   muse2api:
-    image: ghcr.io/qcjoyll/muse2api:latest
+    image: ghcr.io/qcenjoyll/muse2api:latest
     pull_policy: always
     container_name: muse2api
     restart: always
@@ -175,7 +175,7 @@ docker compose pull && docker compose up -d
 ### 回滚到某个版本
 
 ```bash
-docker pull ghcr.io/qcjoyll/muse2api:v1.6.10
+docker pull ghcr.io/qcenjoyll/muse2api:v1.6.10
 # 把上面 docker run 最后的 tag 换成 :v1.6.10 重建即可
 ```
 
@@ -189,7 +189,7 @@ PowerShell 下卷路径要写绝对路径：
 docker run -d --name muse2api -p 18610:18610 --shm-size=2g `
   -e MUSE2API_HOST=0.0.0.0 -e MUSE2API_KEY=m2a_your_admin_key `
   -v "${PWD}\data:/app/data" `
-  ghcr.io/qcjoyll/muse2api:latest
+  ghcr.io/qcenjoyll/muse2api:latest
 ```
 
 需要 Docker Desktop 且处于 **Linux 容器模式**（镜像是 `python:3.11-slim`，不是 Windows 镜像）。
@@ -202,7 +202,7 @@ docker run -d --name muse2api -p 18610:18610 --shm-size=2g `
 包还是 private。要么去 Package settings 改成 Public，要么 `docker login ghcr.io -u QCEnjoyLL -p <PAT>`（PAT 勾 `read:packages`）。
 
 **2. 报 `invalid reference format`**
-把用户名写成大写了。必须 `ghcr.io/qcjoyll/muse2api`，全小写。
+把用户名写成大写了。必须 `ghcr.io/qcenjoyll/muse2api`，全小写。
 
 **3. 国内拉 ghcr.io 很慢 / 超时**
 给 Docker daemon 配代理，或在能访问的机器上 `docker pull` 后 `docker save` / `docker load` 带过去。长期方案是把镜像同步一份到阿里云 ACR 或 Docker Hub（需要给 workflow 加登录和第二次 push）。
